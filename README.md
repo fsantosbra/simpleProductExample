@@ -1,2 +1,2 @@
 # simpleProductExample
-Simple Item crud example with spring boot with h2 database
+Simple Item crud example with spring boot and h2 database
