@@ -1,11 +1,13 @@
 package com.alelo.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.alelo.resources.adapter.ItemService;
 import com.alelo.resources.dto.ItemDTO;
@@ -40,13 +43,25 @@ public class ItemResources {
     }
 
     @PutMapping(path = "/save")
-    public ResponseEntity<String> saveNewItem(@RequestBody String screenFilterDto) {
-        return new ResponseEntity<>("success", HttpStatus.OK);
+    public ResponseEntity<ItemDTO> saveNewItem(@RequestBody ItemDTO itemDto) {
+        ItemDTO newItem = this.itemService.saveItem(itemDto);
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v2/{id}").buildAndExpand(newItem.getId()).toUri();
+        return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location.toString()).body(newItem);
+    }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ItemDTO> getItemById(@PathVariable Long id) {
+        try {
+            return new ResponseEntity<>(this.itemService.getItemById(id), HttpStatus.OK);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<String> deleteItem(@PathVariable String id) {
+    public ResponseEntity<String> deleteItem(@PathVariable Long id) {
         try {
             this.itemService.deleteItem(id);
         }

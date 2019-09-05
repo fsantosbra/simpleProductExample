@@ -8,13 +8,11 @@ import javax.activation.UnsupportedDataTypeException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.alelo.data.Item;
 import com.alelo.data.mapper.ItemMapper;
 import com.alelo.data.repository.ItemRespository;
 import com.alelo.resources.adapter.ItemService;
-import com.alelo.resources.dto.CategoryDTO;
 import com.alelo.resources.dto.ItemDTO;
 
 @Service
@@ -50,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void deleteItem(String id) throws UnsupportedDataTypeException {
+    public void deleteItem(Long id) throws UnsupportedDataTypeException {
         if (Objects.isNull(id)) {
             throw new UnsupportedDataTypeException("The id must be a valid numeric value");
         }
@@ -60,13 +58,16 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public ItemDTO getItemById(Long id) throws Exception {
-        Optional<Item> itemFound = this.repository.findById(id);
-        return this.itemMapper.dtoFromEntity(itemFound.get());
-    }
-
-    public void sellItem(CategoryDTO itemDto) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForEntity("localhost:8080/anyUrlToTest", CategoryDTO.class);
+        if (Objects.isNull(id)) {
+            throw new UnsupportedDataTypeException("The id must be a valid numeric value");
+        }
+        Optional<Item> itemFound = this.repository.findById(Long.valueOf(id));
+        if (itemFound.isPresent()) {
+            return this.itemMapper.dtoFromEntity(itemFound.get());
+        }
+        else {
+            return null;
+        }
     }
 
 }

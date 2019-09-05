@@ -12,7 +12,7 @@ public interface ItemService {
 
     ItemDTO saveItem(ItemDTO item);
 
-    void deleteItem(String id) throws UnsupportedDataTypeException;
+    void deleteItem(Long id) throws UnsupportedDataTypeException;
 
     ItemDTO getItemById(Long id) throws Exception;
 
