@@ -35,9 +35,8 @@ public class ItemResources {
 
     @PutMapping(path = "/save")
     public ResponseEntity<ItemDTO> saveItem(@RequestBody ItemDTO itemDto) {
-        ItemDTO updatedItem;
         try {
-            updatedItem = this.itemService.saveItem(itemDto);
+            ItemDTO updatedItem = this.itemService.saveItem(itemDto);
             return new ResponseEntity<>(updatedItem, HttpStatus.OK);
         }
         catch (Exception e) {

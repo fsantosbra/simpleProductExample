@@ -118,6 +118,35 @@ public class ItemResourcesTests {
         mvc.perform(MockMvcRequestBuilders.get(path).secure(false).accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isInternalServerError());
     }
 
+    @Test
+    public void getItemsExceptionTest() throws Exception {
+        String path = "/api/v2/items/";
+        Mockito.doThrow(new Exception()).when(mockItemService).getListItems();
+        mvc.perform(MockMvcRequestBuilders.get(path).secure(false).accept(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isInternalServerError());
+    }
+
+    @Test
+    public void getSaveItemExceptionTest() throws Exception {
+        ItemDTO item = createNewItem("Item for resources", 10, 1L);
+        String json = objectMapper.writeValueAsString(item);
+        String path = "/api/v2/items/save";
+        Mockito.when(mockItemService.saveItem(Mockito.any())).thenThrow(new Exception());
+        mvc.perform(MockMvcRequestBuilders.post(path).secure(false).content(json).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+        Mockito.verify(mockItemService, Mockito.times(1)).saveItem(Mockito.any(ItemDTO.class));
+    }
+
+    @Test
+    public void getSaveUpdateItemExceptionTest() throws Exception {
+        ItemDTO item = createNewItem("Item for resources", 10, 1L);
+        String json = objectMapper.writeValueAsString(item);
+        String path = "/api/v2/items/save";
+        Mockito.when(mockItemService.saveItem(Mockito.any())).thenThrow(new Exception());
+        mvc.perform(MockMvcRequestBuilders.put(path).secure(false).content(json).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+        Mockito.verify(mockItemService, Mockito.times(1)).saveItem(Mockito.any(ItemDTO.class));
+    }
+
     public ItemDTO createNewItem(String itemDescription, int quantity, Long categoryId) {
         ItemDTO item = new ItemDTO();
         item.setDescription(itemDescription);
