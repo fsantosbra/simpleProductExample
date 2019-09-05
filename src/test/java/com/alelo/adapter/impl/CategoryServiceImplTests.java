@@ -22,6 +22,10 @@ import com.alelo.resources.dto.CategoryDTO;
 @SpringBootTest(classes = Application.class)
 public class CategoryServiceImplTests {
 
+    private static final String URL_ENDPOINT_TEST = "localhost:8080/anyUrlToTest";
+
+    private static final String CATEGORY_NAME = "Category name";
+
     @InjectMocks
     private CategoryServiceImpl categoryService;
 
@@ -39,15 +43,17 @@ public class CategoryServiceImplTests {
         givenRestPostWithCategoryDTO(categoryDto);
         ResponseEntity<CategoryDTO> updatedCategory = whenUpdateCategory(categoryDto);
         thenStatusIsOk(updatedCategory);
+        CategoryDTO category = updatedCategory.getBody();
+        Assert.assertEquals(CATEGORY_NAME, category.getName());
     }
 
     private void givenRestPostWithCategoryDTO(CategoryDTO categoryDto) {
-        Mockito.when(this.restTemplateMock.postForEntity("localhost:8080/anyUrlToTest", categoryDto, CategoryDTO.class)).thenReturn(new ResponseEntity<CategoryDTO>(HttpStatus.OK));
+        Mockito.when(this.restTemplateMock.postForEntity(URL_ENDPOINT_TEST, categoryDto, CategoryDTO.class)).thenReturn(new ResponseEntity<CategoryDTO>(HttpStatus.OK));
     }
 
     private CategoryDTO givenCategory() {
         CategoryDTO categoryDto = new CategoryDTO();
-        categoryDto.setName("Category name");
+        categoryDto.setName(CATEGORY_NAME);
         return categoryDto;
     }
 

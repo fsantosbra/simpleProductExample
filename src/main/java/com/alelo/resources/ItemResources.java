@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.List;
 
 import javax.activation.UnsupportedDataTypeException;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,14 +23,14 @@ import com.alelo.resources.adapter.ItemService;
 import com.alelo.resources.dto.ItemDTO;
 
 @Controller
-@RequestMapping("/api/v2")
+@RequestMapping("/api/v2/items")
 public class ItemResources {
 
     @Autowired
     private ItemService itemService;
 
     @PostMapping(path = "/save")
-    public ResponseEntity<ItemDTO> saveItem(@RequestBody ItemDTO itemDto, HttpServletResponse response) {
+    public ResponseEntity<ItemDTO> saveItem(@RequestBody ItemDTO itemDto) {
         ItemDTO updatedItem = this.itemService.saveItem(itemDto);
         return new ResponseEntity<>(updatedItem, HttpStatus.OK);
 
@@ -45,7 +44,7 @@ public class ItemResources {
     @PutMapping(path = "/save")
     public ResponseEntity<ItemDTO> saveNewItem(@RequestBody ItemDTO itemDto) {
         ItemDTO newItem = this.itemService.saveItem(itemDto);
-        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v2/{id}").buildAndExpand(newItem.getId()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v2/items/{id}").buildAndExpand(newItem.getId()).toUri();
         return ResponseEntity.status(HttpStatus.CREATED).header(HttpHeaders.LOCATION, location.toString()).body(newItem);
     }
 
