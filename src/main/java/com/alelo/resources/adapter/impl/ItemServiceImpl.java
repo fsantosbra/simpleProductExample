@@ -25,26 +25,20 @@ public class ItemServiceImpl implements ItemService {
     private ItemMapper itemMapper;
 
     @Override
-    public List<ItemDTO> getListItems() {
-        try {
-            return this.itemMapper.dtosFromEntities(this.repository.findAll());
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public List<ItemDTO> getListItems() throws Exception {
+        return this.itemMapper.dtosFromEntities(this.repository.findAll());
     }
 
     @Override
-    public ItemDTO saveItem(ItemDTO itemDto) {
-        try {
-            Item item = this.itemMapper.entityFromDto(itemDto);
-            return this.itemMapper.dtoFromEntity(this.repository.saveAndFlush(item));
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public ItemDTO saveItem(ItemDTO itemDto) throws Exception {
+        Item item = this.itemMapper.entityFromDto(itemDto);
+        return this.itemMapper.dtoFromEntity(this.repository.saveAndFlush(item));
+    }
+
+    @Override
+    public List<ItemDTO> saveListItem(List<ItemDTO> itemsDto) throws Exception {
+        List<Item> items = this.itemMapper.entitiesFromDtos(itemsDto);
+        return this.itemMapper.dtosFromEntities(this.repository.saveAll(items));
     }
 
     @Override
@@ -68,6 +62,11 @@ public class ItemServiceImpl implements ItemService {
         else {
             return null;
         }
+    }
+
+    @Override
+    public List<ItemDTO> getItemsByCategoryId(Long id) throws Exception {
+        return this.itemMapper.dtosFromEntities(this.repository.findByCategoryId(id));
     }
 
 }

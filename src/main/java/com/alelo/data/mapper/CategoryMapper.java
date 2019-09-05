@@ -12,7 +12,7 @@ public class CategoryMapper implements Converter<Category, CategoryDTO> {
     @Override
     public Category entityFromDto(CategoryDTO dto) throws Exception {
         Category category = new Category();
-        category.setCategoryId(dto.getId());
+        category.setId(dto.getId());
         category.setCategoryName(dto.getName());
         return category;
     }
@@ -21,7 +21,7 @@ public class CategoryMapper implements Converter<Category, CategoryDTO> {
     public CategoryDTO dtoFromEntity(Category entity) throws Exception {
         CategoryDTO categoryDto = new CategoryDTO();
         categoryDto.setName(entity.getCategoryName());
-        categoryDto.setId(entity.getCategoryId());
+        categoryDto.setId(entity.getId());
         return categoryDto;
     }
 

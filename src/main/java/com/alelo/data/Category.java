@@ -11,39 +11,39 @@ import javax.persistence.Table;
 @Table(name = "CATEGORY")
 public class Category {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "CATEGORY_ID", nullable = false, columnDefinition = "NUMERIC(18,0)")
-	private Long categoryId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "CATEGORY_ID", nullable = false, columnDefinition = "NUMERIC(18,0)")
+    private Long id;
 
-	@Column(name = "CATEGORY_NAME", length = 150, nullable = false)
-	private String categoryName;
+    @Column(name = "CATEGORY_NAME", length = 150, nullable = false)
+    private String categoryName;
 
-	@Column(name = "CATEGORY_DESCRIPTION", length = 255)
-	private String categoryDescription;
+    @Column(name = "CATEGORY_DESCRIPTION", length = 255)
+    private String categoryDescription;
 
-	public Long getCategoryId() {
-		return categoryId;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setCategoryId(Long categoryId) {
-		this.categoryId = categoryId;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getCategoryName() {
-		return categoryName;
-	}
+    public String getCategoryName() {
+        return categoryName;
+    }
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
 
-	public String getCategoryDescription() {
-		return categoryDescription;
-	}
+    public String getCategoryDescription() {
+        return categoryDescription;
+    }
 
-	public void setCategoryDescription(String categoryDescription) {
-		this.categoryDescription = categoryDescription;
-	}
+    public void setCategoryDescription(String categoryDescription) {
+        this.categoryDescription = categoryDescription;
+    }
 
 }
