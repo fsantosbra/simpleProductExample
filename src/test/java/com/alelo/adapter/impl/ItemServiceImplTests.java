@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.annotation.Order;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.alelo.Application;
@@ -15,6 +16,7 @@ import com.alelo.data.Item;
 import com.alelo.data.mapper.ItemMapper;
 import com.alelo.resources.adapter.ItemService;
 import com.alelo.resources.dto.ItemDTO;
+import com.alelo.utils.BaseDataTestUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
@@ -29,18 +31,20 @@ public class ItemServiceImplTests {
     private ItemMapper itemMapper;
 
     @Test
+    @Order(1)
     public void getListItemsTest() throws Exception {
         List<ItemDTO> items = this.itemService.getListItems();
-        Assert.assertEquals(3, items.size());
+        Assert.assertEquals(4, items.size());
         Item newItem = givenNewItem();
         ItemDTO itemCreated = this.itemService.saveItem(itemMapper.dtoFromEntity(newItem));
         items = this.itemService.getListItems();
-        Assert.assertEquals(4, items.size());
+        Assert.assertEquals(5, items.size());
         // delete data created from memory
         this.itemService.deleteItem(itemCreated.getId());
     }
 
     @Test
+    @Order(2)
     public void insertItemTest() throws Exception {
         Item newItem = new Item();
         newItem.setDescription(ITEMS_DESCRIPTION);
@@ -58,6 +62,7 @@ public class ItemServiceImplTests {
     }
 
     @Test
+    @Order(3)
     public void updateItemTest() throws Exception {
         Item foundItem = this.itemMapper.entityFromDto(this.itemService.getItemById(2L));
         foundItem.setQuantity(5);
@@ -66,15 +71,16 @@ public class ItemServiceImplTests {
     }
 
     @Test
+    @Order(4)
     public void deleteItem() throws Exception {
         List<ItemDTO> items = this.itemService.getListItems();
-        Assert.assertEquals(3, items.size());
+        Assert.assertEquals(4, items.size());
         this.itemService.deleteItem(1L);
         items = this.itemService.getListItems();
-        Assert.assertEquals(2, items.size());
+        Assert.assertEquals(3, items.size());
         ItemDTO notFound = this.itemService.getItemById(1L);
         Assert.assertNull(notFound);
-
+        this.itemService.saveItem(BaseDataTestUtils.createNewItem("Replaced Item", 10, 1L));
     }
 
     private Item givenNewItem() {

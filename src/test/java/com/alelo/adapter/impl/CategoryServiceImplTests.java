@@ -48,7 +48,7 @@ public class CategoryServiceImplTests {
     }
 
     private void givenRestPostWithCategoryDTO(CategoryDTO categoryDto) {
-        Mockito.when(this.restTemplateMock.postForEntity(URL_ENDPOINT_TEST, categoryDto, CategoryDTO.class)).thenReturn(new ResponseEntity<CategoryDTO>(HttpStatus.OK));
+        Mockito.when(this.restTemplateMock.postForEntity(URL_ENDPOINT_TEST, categoryDto, CategoryDTO.class)).thenReturn(new ResponseEntity<CategoryDTO>(categoryDto, HttpStatus.OK));
     }
 
     private CategoryDTO givenCategory() {

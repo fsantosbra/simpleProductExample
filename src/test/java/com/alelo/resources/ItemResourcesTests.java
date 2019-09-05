@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -25,14 +26,16 @@ public class ItemResourcesTests {
     private ItemResources itemResources;
 
     @Test
+    @Order(1)
     public void getListItemsTest() throws ClientProtocolException, IOException {
         ResponseEntity<List<ItemDTO>> itemsResponse = this.itemResources.getItems();
         Assert.assertEquals(HttpStatus.OK, itemsResponse.getStatusCode());
         List<ItemDTO> listItems = itemsResponse.getBody();
-        Assert.assertEquals(3, listItems.size());
+        Assert.assertEquals(4, listItems.size());
     }
 
     @Test
+    @Order(2)
     public void saveNewItemTest() throws ClientProtocolException, IOException {
         ItemDTO item = BaseDataTestUtils.createNewItem("Item for resources", 10, 1L);
         ResponseEntity<ItemDTO> itemResponse = this.itemResources.saveNewItem(item);
@@ -45,8 +48,9 @@ public class ItemResourcesTests {
     }
 
     @Test
+    @Order(3)
     public void saveItemTest() throws ClientProtocolException, IOException {
-        ItemDTO item = this.itemResources.getItemById(1L).getBody();
+        ItemDTO item = this.itemResources.getItemById(3L).getBody();
         item.setQuantity(90);
         ResponseEntity<ItemDTO> itemResponse = this.itemResources.saveItem(item);
         Assert.assertEquals(HttpStatus.OK, itemResponse.getStatusCode());
